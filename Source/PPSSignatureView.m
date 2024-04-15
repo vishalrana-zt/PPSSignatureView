@@ -1,8 +1,8 @@
 #import "PPSSignatureView.h"
 #import <OpenGLES/ES2/glext.h>
 
-#define             STROKE_WIDTH_MIN 0.004 // Stroke width determined by touch velocity
-#define             STROKE_WIDTH_MAX 0.030
+#define             STROKE_WIDTH_MIN 0.005 // Stroke width determined by touch velocity
+#define             STROKE_WIDTH_MAX 0.005
 #define       STROKE_WIDTH_SMOOTHING 0.5   // Low pass filter alpha
 
 #define           VELOCITY_CLAMP_MIN 20
@@ -211,6 +211,8 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 
 - (UIImage *)signatureImage
 {
+    self.backgroundColor = [UIColor clearColor];
+
 	if (!self.hasSignature)
 		return nil;
 
@@ -273,7 +275,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 
 
 - (void)longPress:(UILongPressGestureRecognizer *)lp {
-    [self erase];
+   //[self erase];
 }
 
 - (void)pan:(UIPanGestureRecognizer *)p {
@@ -370,7 +372,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 #pragma mark - Private
 
 - (void)updateStrokeColor {
-    CGFloat red, green, blue, alpha, white;
+    CGFloat red= 0.0, green= 0.0, blue= 0.0, alpha = 0.0, white= 0.0;
     if (effect && self.strokeColor && [self.strokeColor getRed:&red green:&green blue:&blue alpha:&alpha]) {
         effect.constantColor = GLKVector4Make(red, green, blue, alpha);
     } else if (effect && self.strokeColor && [self.strokeColor getWhite:&white alpha:&alpha]) {
