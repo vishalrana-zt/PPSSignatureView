@@ -232,12 +232,17 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 //
 //    self.strokeColor = [UIColor whiteColor];
 //    [self setNeedsDisplay];
-    UIImage *screenshot = [self snapshot];
+//    UIImage *screenshot = [self snapshot];
+    
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, 0.0);
+    [[self layer] renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *signature = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     
 //    self.strokeColor = nil;
 //
 //    self.hidden = NO;
-    return screenshot;
+    return signature;
 }
 
 
