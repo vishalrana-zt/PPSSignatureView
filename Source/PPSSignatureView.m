@@ -118,7 +118,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 
 - (void)commonInit {
     context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    
+    [self addPreSignatureImageView];
     if (context) {
         time(NULL);
         
@@ -167,6 +167,18 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
     return self;
 }
 
+- (void)addPreSignatureImageView
+{
+    self.preSignedImageView = [[UIImageView alloc] init];
+    [self.preSignedImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.preSignedImageView setContentMode:UIViewContentModeScaleAspectFit];
+    [self addSubview:self.preSignedImageView];
+    [self sendSubviewToBack:self.preSignedImageView];
+    [self.preSignedImageView.topAnchor constraintEqualToAnchor:self.topAnchor constant:0.0].active = YES;
+    [self.preSignedImageView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:0.0].active = YES;
+    [self.preSignedImageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:0.0].active = YES;
+    [self.preSignedImageView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:0.0].active = YES;
+}
 
 - (void)dealloc
 {
@@ -175,7 +187,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
     if ([EAGLContext currentContext] == context) {
         [EAGLContext setCurrentContext:nil];
     }
-	context = nil;
+    context = nil;
 }
 
 
@@ -203,8 +215,8 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
     length = 0;
     dotsLength = 0;
     self.hasSignature = NO;
-	
-	[self setNeedsDisplay];
+    self.self.preSignedImageView = nil;
+    [self setNeedsDisplay];
 }
 
 
@@ -289,7 +301,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
     float distance = 0.;
     if (previousPoint.x > 0) {
         distance = sqrtf((l.x - previousPoint.x) * (l.x - previousPoint.x) + (l.y - previousPoint.y) * (l.y - previousPoint.y));
-    }    
+    }
 
     float velocityMagnitude = sqrtf(v.x*v.x + v.y*v.y);
     float clampedVelocityMagnitude = clamp(VELOCITY_CLAMP_MIN, VELOCITY_CLAMP_MAX, velocityMagnitude);
@@ -310,8 +322,8 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
         
         addVertex(&length, startPoint);
         addVertex(&length, previousVertex);
-		
-		self.hasSignature = YES;
+        
+        self.hasSignature = YES;
         
     } else if ([p state] == UIGestureRecognizerStateChanged) {
         
@@ -343,7 +355,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
             PPSSignaturePoint v = ViewPointToGL(l, self.bounds, StrokeColor);
             [self addTriangleStripPointsForPrevious:previousVertex next:v];
             
-            previousVertex = v;            
+            previousVertex = v;
             previousThickness = penThickness;
         }
         
@@ -359,7 +371,7 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
         addVertex(&length, previousVertex);
     }
     
-	[self setNeedsDisplay];
+    [self setNeedsDisplay];
 }
 
 
