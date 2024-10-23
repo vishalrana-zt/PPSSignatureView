@@ -6,7 +6,6 @@
 @property (assign, nonatomic) UIColor *strokeColor;
 @property (assign, nonatomic) BOOL hasSignature;
 @property (strong, nonatomic) UIImage *signatureImage;
-@property (strong, nonatomic) UIImageView *preSignedImageView;
 
 - (void)erase;
 

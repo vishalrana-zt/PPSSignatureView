@@ -167,19 +167,6 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
     return self;
 }
 
-- (void)addPreSignatureImageView
-{
-    self.preSignedImageView = [[UIImageView alloc] init];
-    [self.preSignedImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.preSignedImageView setContentMode:UIViewContentModeScaleAspectFit];
-    [self addSubview:self.preSignedImageView];
-    [self sendSubviewToBack:self.preSignedImageView];
-    [self.preSignedImageView.topAnchor constraintEqualToAnchor:self.topAnchor constant:0.0].active = YES;
-    [self.preSignedImageView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:0.0].active = YES;
-    [self.preSignedImageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:0.0].active = YES;
-    [self.preSignedImageView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:0.0].active = YES;
-}
-
 - (void)dealloc
 {
     [self tearDownGL];
@@ -215,7 +202,6 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
     length = 0;
     dotsLength = 0;
     self.hasSignature = NO;
-    self.self.preSignedImageView = nil;
     [self setNeedsDisplay];
 }
 
@@ -232,17 +218,12 @@ static PPSSignaturePoint ViewPointToGL(CGPoint viewPoint, CGRect bounds, GLKVect
 //
 //    self.strokeColor = [UIColor whiteColor];
 //    [self setNeedsDisplay];
-//    UIImage *screenshot = [self snapshot];
-    
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, 0.0);
-    [[self layer] renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *signature = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    UIImage *screenshot = [self snapshot];
     
 //    self.strokeColor = nil;
 //
 //    self.hidden = NO;
-    return signature;
+    return screenshot;
 }
 
 
